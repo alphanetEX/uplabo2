@@ -1,0 +1,25 @@
+version: '3.3'
+services:
+  oracle-db:
+    image: gvenzl/oracle-xe:11.2.0.2
+    ports:
+      - 1521:1521
+    volumes:
+      - ./seeders:/docker-entrypoint-initdb.d/
+      - /seeders/src/Crea_alumno.sql          #no lo va a copiar
+      - db-vol:/opt/oracle/oradata
+    environment:
+      ORACLE_PASSWORD: root
+      APP_USER: USERDB
+      APP_USER_PASSWORD: PASSWORD
+    networks:
+      db-auth:
+volumes:
+      db-vol:
+networks:
+    db-auth:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+              - subnet: 10.0.3.0/27
